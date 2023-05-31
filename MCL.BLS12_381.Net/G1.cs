@@ -45,6 +45,22 @@ namespace MCL.BLS12_381.Net
                 }
             }
         }
+        
+        public G1 HashAndMapTo(string input)
+        {
+            var bytes = Encoding.ASCII.GetBytes(input);
+            
+            unsafe
+            {
+                fixed (G1* ptr = &this)
+                fixed (byte* bytesPtr = bytes)
+                {
+                    MclBls12381.Imports.MclBnG1HashAndMapTo.Value(ptr, bytesPtr, (ulong) bytes.Length);
+                }
+
+                return this;
+            }
+        }
 
         public void SetHashOf(byte[] bytes)
         {
