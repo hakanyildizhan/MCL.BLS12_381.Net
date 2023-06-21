@@ -9,6 +9,7 @@ namespace MCL.BLS12_381.Net
         internal readonly Lazy<mclBnFr_clear> MclBnFrClear;
         internal readonly Lazy<mclBnFr_setInt32> MclBnFrSetInt32;
         internal readonly Lazy<mclBnFr_setByCSPRNG> MclBnFrSetByCsprng;
+        internal readonly Lazy<mclBnFr_setHashOf> MclBnFrSetHashOf;
         internal readonly Lazy<mclBnFr_setStr> MclBnFrSetStr;
         internal readonly Lazy<mclBnFr_getStr> MclBnFrGetStr;
         internal readonly Lazy<mclBnFr_isValid> MclBnFrIsValid;
@@ -94,6 +95,7 @@ namespace MCL.BLS12_381.Net
             MclBnFrClear = LazyDelegate<mclBnFr_clear>();
             MclBnFrSetInt32 = LazyDelegate<mclBnFr_setInt32>();
             MclBnFrSetByCsprng = LazyDelegate<mclBnFr_setByCSPRNG>();
+            MclBnFrSetHashOf = LazyDelegate<mclBnFr_setHashOf>();
             MclBnFrSetStr = LazyDelegate<mclBnFr_setStr>();
             MclBnFrGetStr = LazyDelegate<mclBnFr_getStr>();
             MclBnFrIsValid = LazyDelegate<mclBnFr_isValid>();

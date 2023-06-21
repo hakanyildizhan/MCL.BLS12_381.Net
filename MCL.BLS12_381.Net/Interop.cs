@@ -15,6 +15,9 @@ namespace MCL.BLS12_381.Net
 
     [SymbolName(nameof(mclBnFr_setByCSPRNG))]
     public unsafe delegate int mclBnFr_setByCSPRNG(Fr* y);
+    
+    [SymbolName(nameof(mclBnFr_setHashOf))]
+    public unsafe delegate int mclBnFr_setHashOf(Fr* y, void* buf, ulong bufSize);
 
     [SymbolName(nameof(mclBnFr_setStr))]
     public unsafe delegate int mclBnFr_setStr(Fr* x, void* input, ulong bufSize, int ioMode);
