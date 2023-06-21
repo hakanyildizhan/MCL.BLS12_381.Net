@@ -1,3 +1,4 @@
+using System.Text;
 using NUnit.Framework;
 
 namespace MCL.BLS12_381.Net.Test
@@ -23,7 +24,7 @@ namespace MCL.BLS12_381.Net.Test
             Assert.AreEqual(rnd + G2.Zero, rnd);
             Assert.AreEqual(rnd * Fr.Zero, G2.Zero);
             Assert.AreEqual(
-                "G2(000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000)",
+                "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
                 G2.Zero.ToString()
             );
             Assert.AreNotEqual(G2.Zero, G1.Zero);
@@ -42,7 +43,7 @@ namespace MCL.BLS12_381.Net.Test
             Assert.AreEqual(G2.Generator.Double(), G2.Generator + G2.Generator);
             Assert.AreEqual(G2.Generator.Double(), G2.Generator * Fr.FromInt(2));
             Assert.AreEqual(
-                "G2(f1437606f337b000f00d69507434dbbd3b2abfa8a291d88551d92309fe3c222e0790fc847e849eb984bb807cba59170a0a63480e9457a375705ea2aba224a711e717ecddb224feeb738630945581bda24389f8fecf7865724361aec550e44919)",
+                "f1437606f337b000f00d69507434dbbd3b2abfa8a291d88551d92309fe3c222e0790fc847e849eb984bb807cba59170a0a63480e9457a375705ea2aba224a711e717ecddb224feeb738630945581bda24389f8fecf7865724361aec550e44919",
                 G2.Generator.ToString()
             );
             Assert.AreNotEqual(G1.Generator, G2.Generator);
@@ -73,13 +74,26 @@ namespace MCL.BLS12_381.Net.Test
 
         [Test]
         [Repeat(100)]
-        public void SerializationRoundTrip()
+        public void ByteSerializationRoundTrip()
         {
             var x = G2.Generator * Fr.GetRandom();
             Assert.IsTrue(x.IsValid());
             var serialized = x.ToBytes();
             Assert.AreEqual(96, serialized.Length);
             var restored = G2.FromBytes(serialized);
+            Assert.AreEqual(x, restored);
+        }
+        
+        [Test]
+        [Repeat(100)]
+        public void StringSerializationRoundTrip()
+        {
+            var fr = Fr.GetRandom();
+            var x = G2.Generator * fr;
+            Assert.IsTrue(x.IsValid());
+            var xString = x.ToString();
+            Assert.AreEqual(192, xString.Length);
+            var restored = G2.FromString(xString);
             Assert.AreEqual(x, restored);
         }
     }

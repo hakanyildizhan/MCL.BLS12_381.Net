@@ -34,6 +34,22 @@ namespace MCL.BLS12_381.Net
             res.SetBytes(bytes);
             return res;
         }
+        
+        public static G2 FromString(string input)
+        {
+            var res = new G2();
+            var bytes = new byte[ByteSize];
+
+            for (int i = 0; i < 192; i+=2)
+            {
+                string hex = input[i].ToString() + input[i + 1].ToString();
+                byte decValue = Convert.ToByte(hex, 16);
+                bytes[i / 2] = decValue;
+            }
+            
+            res.SetBytes(bytes);
+            return res;
+        }
 
         public void Clear()
         {
@@ -270,7 +286,7 @@ namespace MCL.BLS12_381.Net
 
         public override string ToString()
         {
-            return $"G2({Encoding.ASCII.GetString(ToBytes(IoMode.IoSerializeHexStr))})";
+            return $"{Encoding.ASCII.GetString(ToBytes(IoMode.IoSerializeHexStr))}";
         }
     }
 }

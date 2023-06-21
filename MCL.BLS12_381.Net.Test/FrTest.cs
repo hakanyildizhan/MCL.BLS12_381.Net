@@ -36,7 +36,7 @@ namespace MCL.BLS12_381.Net.Test
             Assert.AreEqual(rnd * Fr.Zero, Fr.Zero);
             Assert.AreEqual(Fr.Zero, Fr.Zero.Inverse()); // NB
             Assert.AreEqual(
-                "Fr(0000000000000000000000000000000000000000000000000000000000000000)",
+                "0000000000000000000000000000000000000000000000000000000000000000",
                 Fr.Zero.ToString()
             );
             Assert.AreNotEqual(Fr.Zero, G1.Zero);
@@ -59,7 +59,7 @@ namespace MCL.BLS12_381.Net.Test
             Assert.AreEqual(rnd / Fr.One, rnd);
             Assert.AreEqual(Fr.One, Fr.One.Inverse());
             Assert.AreEqual(
-                "Fr(0100000000000000000000000000000000000000000000000000000000000000)",
+                "0100000000000000000000000000000000000000000000000000000000000000",
                 Fr.One.ToString()
             );
             Assert.AreNotEqual(Fr.One, G1.Generator);
@@ -96,13 +96,24 @@ namespace MCL.BLS12_381.Net.Test
 
         [Test]
         [Repeat(100)]
-        public void SerializationRoundTrip()
+        public void ByteSerializationRoundTrip()
         {
             var x = Fr.GetRandom();
             Assert.IsTrue(x.IsValid());
             var serialized = x.ToBytes();
             Assert.AreEqual(serialized.Length, 32);
             var restored = Fr.FromBytes(serialized);
+            Assert.AreEqual(x, restored);
+        }
+        
+        [Test]
+        public void StringSerializationRoundTrip()
+        {
+            var x = Fr.GetRandom();
+            Assert.IsTrue(x.IsValid());
+            var xStr = x.ToString();
+            Assert.AreEqual(xStr.Length, 64);
+            var restored = Fr.FromString(xStr);
             Assert.AreEqual(x, restored);
         }
     }

@@ -33,6 +33,22 @@ namespace MCL.BLS12_381.Net
             res.SetBytes(bytes);
             return res;
         }
+        
+        public static Fr FromString(string input)
+        {
+            var res = new Fr();
+            var bytes = new byte[ByteSize*2];
+
+            for (int i = 0; i < ByteSize*2; i+=2)
+            {
+                string hex = input[i].ToString() + input[i + 1].ToString();
+                byte decValue = Convert.ToByte(hex, 16);
+                bytes[i/2] = decValue;
+            }
+            
+            res.SetBytes(bytes);
+            return res;
+        }
 
         public void Clear()
         {
@@ -100,6 +116,41 @@ namespace MCL.BLS12_381.Net
                 {
                     var size = MclBls12381.Imports.MclBnFrDeserialize.Value(ptr, bytesPtr, (ulong) bytes.Length);
                     if (size == 0) throw new InvalidOperationException("mclBnFr_setStr failed to deserialize Fr");
+                }
+            }
+        }
+        
+        public void SetHashOf(Span<byte> bytes)
+        {
+            unsafe
+            {
+                fixed (Fr* ptr = &this)
+                fixed (byte* bytesPtr = bytes)
+                {
+                    var error = MclBls12381.Imports.MclBnFrSetHashOf.Value(ptr, bytesPtr, (ulong) bytes.Length);
+                    if (error != 0) throw new InvalidOperationException($"mclBnFr_setHashOf error: {error}");
+                }
+            }
+        }
+        
+        public void SetHashOf(string input)
+        {
+            var bytes = new byte[ByteSize*2];
+
+            for (int i = 0; i < ByteSize*2; i+=2)
+            {
+                string hex = input[i].ToString() + input[i + 1].ToString();
+                byte decValue = Convert.ToByte(hex, 16);
+                bytes[i/2] = decValue;
+            }
+            
+            unsafe
+            {
+                fixed (Fr* ptr = &this)
+                fixed (byte* bytesPtr = bytes)
+                {
+                    var error = MclBls12381.Imports.MclBnFrSetHashOf.Value(ptr, bytesPtr, (ulong) bytes.Length);
+                    if (error != 0) throw new InvalidOperationException($"mclBnFr_setHashOf error: {error}");
                 }
             }
         }
@@ -311,7 +362,7 @@ namespace MCL.BLS12_381.Net
 
         public override string ToString()
         {
-            return $"Fr({Encoding.ASCII.GetString(ToBytes(IoMode.IoSerializeHexStr))})";
+            return $"{Encoding.ASCII.GetString(ToBytes(IoMode.IoSerializeHexStr))}";
         }
     }
 }
